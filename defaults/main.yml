@@ -1,0 +1,36 @@
+---
+backup_borg_reposoitory: /srv/backup
+backup_borg_encryption: keyfile-blake2
+backup_borg_cron:
+  minute: 0
+  hour: 3
+  day: '*'
+  weekday: '*'
+  month: '*'
+
+backup_borg_envars:
+  BORG_REPO: "{{ backup_borg_reposoitory }}"
+  BORG_PASSPHRASE: "N27N87aC6WNfNM9B"
+  BORG_PASSCOMMAND: ""
+  BORG_NEW_PASSPHRASE: ""
+  BORG_HOSTNAME_IS_UNIQUE: "no"
+  BORG_HOST_ID: ""
+  BORG_RSH: ""
+  BORG_REMOTE_PATH: ""
+  BORG_FILES_CACHE_TTL: "20"
+  BORG_SHOW_SYSINFO: "yes"
+  TMPDIR: ""
+  BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK: "no"
+  BORG_RELOCATED_REPO_ACCESS_IS_OK: "no"
+  BORG_CHECK_I_KNOW_WHAT_I_AM_DOING: "NO"
+  BORG_DELETE_I_KNOW_WHAT_I_AM_DOING: "NO"
+  BORG_RECREATE_I_KNOW_WHAT_I_AM_DOING: "NO"
+
+backup_borg_exclude_file: ""
+backup_borg_exclude_files: []
+backup_borg_exclude_patterns_file: ""
+backup_borg_exclude_patterns: []
+backup_borg_exclude_if_present: []
+
+backup_borg_create_options: "--verbose --filter AME --list --stats --compression auto,zlib,9 --exclude-caches --exclude-nodump"
+backup_borg_prune_options: "--list --prefix '{hostname}' --keep-daily 7 --keep-weekly 4 --keep-monthly 6"
