@@ -1,0 +1,12 @@
+---
+- name: "Include tasks for {{ ansible_os_family }} - {{ ansible_distribution }} ({{ ansible_distribution_release }})"
+  include_tasks: "{{ ansible_distribution_release }}/main.yml"
+
+- name: "Install Borgbackup"
+  apt:
+    name: "borgbackup"
+    state: present
+    install_recommends: yes
+    default_release: "{{ ansible_distribution_release }}-backports"
+    update_cache: yes
+    cache_valid_time: 3600
