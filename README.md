@@ -99,7 +99,7 @@ Example Playbook
           - '*/.local/share/Trash'
           - '/home/*/Downloads'
     roles:
-      - the-paulus.backup-borg
+      - the-paulus.ansible-borgbackup
 ```
 
 License
