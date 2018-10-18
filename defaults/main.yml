@@ -27,10 +27,15 @@ backup_borg_envars:
   BORG_RECREATE_I_KNOW_WHAT_I_AM_DOING: "NO"
 
 backup_borg_exclude_file: ""
-backup_borg_exclude_files: []
+backup_borg_exclude_files:
+  - '*/lost+found'
+  - '*/.local/share/Trash'
+
 backup_borg_exclude_patterns_file: ""
 backup_borg_exclude_patterns: []
 backup_borg_exclude_if_present: []
 
 backup_borg_create_options: "--verbose --filter AME --list --stats --compression auto,zlib,9 --exclude-caches --exclude-nodump"
 backup_borg_prune_options: "--list --prefix '{hostname}' --keep-daily 7 --keep-weekly 4 --keep-monthly 6"
+backup_borg_archive_name: "{hostname}-{now:%Y-%m-%dT%H:%M:%S}"
+backup_borg_paths: "/etc /root /home"
