@@ -1,0 +1,30 @@
+galaxy_info:
+  author: Paul Lyon
+  description: Installs borgbackup and creates a cron job to backup files using borg.
+  company:
+
+  issue_tracker_url: https://github.com/the-paulus/ansible-borgbackup/issues
+
+  license: BSD
+
+  min_ansible_version: 1.2
+
+  platforms:
+  - name: EL
+    versions:
+    - 6
+    - 7
+  - name: Debian
+    versions:
+    - 7
+    - 8
+    - 9
+  - name: Gentoo
+    versions:
+    - all
+
+  galaxy_tags:
+  - system
+  - backup
+
+dependencies: []
