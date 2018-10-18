@@ -1,0 +1,9 @@
+---
+- name: "Include tasks for {{ ansible_os_family }} - {{ ansible_distribution }}"
+  include_tasks: "{{ ansible_distribution }}/main.yml"
+
+- name: "Install borgbackup"
+  yum:
+    name: borgbackup
+    update_cache: yes
+    state: present 
