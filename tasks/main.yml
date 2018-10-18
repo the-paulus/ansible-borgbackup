@@ -1,0 +1,38 @@
+---
+- name: "Include tasks for {{ ansible_os_family }}"
+  include_tasks: "{{ ansible_os_family }}/main.yml"
+
+- name: "Create backup repository"
+  shell: "borg init --encryption {{ backup_borg_encryption }} {{ backup_borg_reposoitory }}"
+  warn: no
+
+- name: "Create cron job"
+  cron:
+    user: root
+    weekday: "{{ backup_borg_cron['weekday'] }}"
+    hour: "{{ backup_borg_cron['hour'] }}"
+    name: "Borg Backup"
+    job: "/etc/cron.d/backup"
+    state: present
+    day: "{{ backup_borg_cron['day'] }}"
+    minute: "{{ backup_borg_cron['minute'] }}"
+    month: "{{ backup_borg_cron['month'] }}"
+  when: backup_borg_cron
+
+- name: "Add environmental variables"
+  cron:
+    user: root
+    env: yes
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+  with_dict: "{{ backup_borg_envars }}"
+  when: backup_borg_cron
+
+- name: "Create cron job file"
+  template:
+    dest: "/etc/cron.d/backup"
+    src: "backup.j2"
+    group: "root"
+    mode: "0711"
+    owner: "root"
+  when: backup_borg_cron
