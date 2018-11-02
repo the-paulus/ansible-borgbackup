@@ -2,9 +2,15 @@
 - name: "Include tasks for {{ ansible_os_family }}"
   include_tasks: "{{ ansible_os_family }}/main.yml"
 
+- name: "Set environment variables"
+  set_fact:
+    borgbackup_envars: "{{ borgbackup_envars|default('') }} export {{ item.key }}=\"{{ item.value }}\"; "
+  with_dict: "{{ backup_borg_envars }}"
+
 - name: "Create backup repository"
-  shell: "borg init --encryption {{ backup_borg_encryption }} {{ backup_borg_reposoitory }}"
+  shell: "{{ borgbackup_envars }} borg init --encryption {{ backup_borg_encryption }} {{ backup_borg_reposoitory }}"
   warn: no
+  ignore_errors: yes
 
 - name: "Create cron job"
   cron:
