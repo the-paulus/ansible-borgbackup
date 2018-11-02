@@ -5,25 +5,25 @@
 - name: "Set environment variables"
   set_fact:
     borgbackup_envars: "{{ borgbackup_envars|default('') }} export {{ item.key }}=\"{{ item.value }}\"; "
-  with_dict: "{{ backup_borg_envars }}"
+  with_dict: "{{ borgbackup_envars }}"
 
 - name: "Create backup repository"
-  shell: "{{ borgbackup_envars }} borg init --encryption {{ backup_borg_encryption }} {{ backup_borg_reposoitory }}"
+  shell: "{{ borgbackup_envars }} borg init --encryption {{ borgbackup_encryption }} {{ borgbackup_reposoitory }}"
   warn: no
   ignore_errors: yes
 
 - name: "Create cron job"
   cron:
     user: root
-    weekday: "{{ backup_borg_cron['weekday'] }}"
-    hour: "{{ backup_borg_cron['hour'] }}"
+    weekday: "{{ borgbackup_cron['weekday'] }}"
+    hour: "{{ borgbackup_cron['hour'] }}"
     name: "Borg Backup"
     job: "/etc/cron.d/backup"
     state: present
-    day: "{{ backup_borg_cron['day'] }}"
-    minute: "{{ backup_borg_cron['minute'] }}"
-    month: "{{ backup_borg_cron['month'] }}"
-  when: backup_borg_cron
+    day: "{{ borgbackup_cron['day'] }}"
+    minute: "{{ borgbackup_cron['minute'] }}"
+    month: "{{ borgbackup_cron['month'] }}"
+  when: borgbackup_cron
 
 - name: "Add environmental variables"
   cron:
@@ -31,8 +31,8 @@
     env: yes
     name: "{{ item.key }}"
     value: "{{ item.value }}"
-  with_dict: "{{ backup_borg_envars }}"
-  when: backup_borg_cron
+  with_dict: "{{ borgbackup_envars }}"
+  when: borgbackup_cron
 
 - name: "Create cron job file"
   template:
@@ -41,4 +41,4 @@
     group: "root"
     mode: "0711"
     owner: "root"
-  when: backup_borg_cron
+  when: borgbackup_cron

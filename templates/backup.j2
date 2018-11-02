@@ -1,10 +1,10 @@
 #!/bin/sh
 
-borg create {{ backup_borg_create_options }} \
-  {% if backup_borg_exclude_file %}--exclude-file {{ backup_borg_exclude_file }} \
+borg create {{ borgbackup_create_options }} \
+  {% if borgbackup_exclude_file %}--exclude-file {{ borgbackup_exclude_file }} \
   {% endif %}
-{% if backup_borg_exclude_files %}--exclude '{{ backup_borg_exclude_files|join("' \\\n\t--exclude '") }}' \
+{% if borgbackup_exclude_files %}--exclude '{{ borgbackup_exclude_files|join("' \\\n\t--exclude '") }}' \
   {% endif %}
-::{{ backup_borg_archive_name }} >&2 >> /var/logs/backup.log
+::{{ borgbackup_archive_name }} >&2 >> /var/logs/backup.log
 
-borg prune {{ backup_borg_prune_options }} >&2 >> /var/logs/backup.log
+borg prune {{ borgbackup_prune_options }} >&2 >> /var/logs/backup.log

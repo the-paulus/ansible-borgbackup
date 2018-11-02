@@ -13,17 +13,17 @@ Role Variables
 
 This and one of the password environment variables are the only variables that is absolutely required.
 ```yml
-backup_borg_reposoitory: /srv/backup
+borgbackup_reposoitory: /srv/backup
 ```
 
 Although the encryption mode is technically required, a default is provided.
 ```yml
-backup_borg_encryption: keyfile-blake2
+borgbackup_encryption: keyfile-blake2
 ```
 
-If you don't want to create a cron job then define **backup_borg_cron** as `[]`
+If you don't want to create a cron job then define **borgbackup_cron** as `[]`
 ```yml
-backup_borg_cron:
+borgbackup_cron:
   minute: 0
   hour: 3
   day: '*'
@@ -31,10 +31,10 @@ backup_borg_cron:
   month: '*'
 ```
 
-In order to create a cron job that will create backups the **BORG_REPO** and either the **BORG_PASSPHRASE** or **BORG_PASSCOMMAND** need to be set. See the [Environment Variables](https://borgbackup.readthedocs.io/en/stable/man_intro.html#environment-variables).
+In order to create a cron job that will create backups the **BORG_REPO** and either the **BORG_PASSPHRASE** or **BORG_PASSCOMMAND** need to be set unless you are using key files only. See the [Environment Variables](https://borgbackup.readthedocs.io/en/stable/man_intro.html#environment-variables).
 ```yml
-backup_borg_envars:
-  BORG_REPO: "{{ backup_borg_reposoitory }}"
+borgbackup_envars:
+  BORG_REPO: "{{ borgbackup_reposoitory }}"
   BORG_PASSPHRASE: "N27N87aC6WNfNM9B"
   BORG_PASSCOMMAND: ""
   BORG_NEW_PASSPHRASE: ""
@@ -54,30 +54,30 @@ backup_borg_envars:
 
 The following variables tell borg which files to exclude in the backup. There is no restriction on which ones can and cannot be used in conjunction.
 ```yml
-backup_borg_exclude_file: ""
-backup_borg_exclude_files:
+borgbackup_exclude_file: ""
+borgbackup_exclude_files:
   - '*/lost+found'
   - '*/.local/share/Trash'
 
-backup_borg_exclude_patterns_file: ""
-backup_borg_exclude_patterns: []
-backup_borg_exclude_if_present: ""
+borgbackup_exclude_patterns_file: ""
+borgbackup_exclude_patterns: []
+borgbackup_exclude_if_present: ""
 ```
 
 The command options for the create and prune subcommands.
 ```yml
-backup_borg_create_options: "--verbose --filter AME --list --stats --compression auto,zlib,9 --exclude-caches --exclude-nodump"
-backup_borg_prune_options: "--list --prefix '{hostname}' --keep-daily 7 --keep-weekly 4 --keep-monthly 6"
+borgbackup_create_options: "--verbose --filter AME --list --stats --compression auto,zlib,9 --exclude-caches --exclude-nodump"
+borgbackup_prune_options: "--list --prefix '{hostname}' --keep-daily 7 --keep-weekly 4 --keep-monthly 6"
 ```
 
 The name of each archive that is created.
 ```yml
-backup_borg_archive_name: "{hostname}-{now:%Y-%m-%dT%H:%M:%S}"
+borgbackup_archive_name: "{hostname}-{now:%Y-%m-%dT%H:%M:%S}"
 ```
 
 What directories to backup.
 ```yml
-backup_borg_paths: "/etc /root /home"
+borgbackup_paths: "/etc /root /home"
 ```
 
 Dependencies
@@ -91,10 +91,10 @@ Example Playbook
 ```yml
   - hosts: servers
     vars:
-      backup_borg_reposoitory: "ssh://backup@192.168.1.2:/srv/backup"
-      backup_borg_envars:
-        BORG_REPO: "{{ backup_borg_reposoitory }}"
-        backup_borg_exclude_files:
+      borgbackup_reposoitory: "ssh://backup@192.168.1.2:/srv/backup"
+      borgbackup_envars:
+        BORG_REPO: "{{ borgbackup_reposoitory }}"
+        borgbackup_exclude_files:
           - '*/lost+found'
           - '*/.local/share/Trash'
           - '/home/*/Downloads'
