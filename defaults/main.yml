@@ -8,6 +8,9 @@ borgbackup_cron:
   weekday: '*'
   month: '*'
 
+#borgbackup_user: "backup"
+#borgbackup_user_password: ""
+
 borgbackup_envars:
   #BORG_REPO: "{{ borgbackup_reposoitory }}"
   #BORG_PASSPHRASE: ""

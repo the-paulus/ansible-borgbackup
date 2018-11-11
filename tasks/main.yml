@@ -4,11 +4,12 @@
 
 - name: "Set environment variables"
   set_fact:
-    borgbackup_envars: "{{ borgbackup_envars|default('') }} export {{ item.key }}=\"{{ item.value }}\"; "
+    borgbackup_envars_export: "export {{ item.key }}=\"{{ item.value }}\"; {{ borgbackup_envars_export|default('') }}"
   with_dict: "{{ borgbackup_envars }}"
+  when: borgbackup_envars is defined and borgbackup_envars
 
 - name: "Create backup repository"
-  shell: "{{ borgbackup_envars }} borg init --encryption {{ borgbackup_encryption }} {{ borgbackup_reposoitory }}"
+  shell: "{{ borgbackup_envars_export }} borg init --encryption {{ borgbackup_encryption }} {{ borgbackup_reposoitory }}"
   warn: no
   ignore_errors: yes
 
@@ -32,7 +33,7 @@
     name: "{{ item.key }}"
     value: "{{ item.value }}"
   with_dict: "{{ borgbackup_envars }}"
-  when: borgbackup_cron
+  when: borgbackup_cron is defined and borgbackup_cron
 
 - name: "Create cron job file"
   template:

@@ -1,0 +1,12 @@
+---
+- hosts: all
+  pre_tasks:
+    - name: "Create /srv/backup"
+      file:
+        path: "/srv/backup"
+        state: directory
+        owner: root
+        group: root
+        recurse: yes
+
+  roles:
